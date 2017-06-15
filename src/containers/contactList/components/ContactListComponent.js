@@ -48,23 +48,43 @@ export default class ContactListComponent extends PureComponent {
 
     render() {
         const { contactList } = this.props;
+        const columns = [{
+            title: 'Id',
+            dataIndex: 'id',
+            key: 'id'
+        }, {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name'
+        }, {
+            title: 'Gender',
+            dataIndex: 'gender',
+            key: 'gender'
+        }, {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'phone'
+        }, {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => {
+                return (
+                    <div>
+                        <Button onClick={() => { this._showDetail(record.id); }}>Detail</Button>
+                        <Button
+                          type="danger"
+                          icon="close"
+                          onClick={() => { this._deleteItem(record.name); }}
+                        >
+                            Delete
+                        </Button>
+                    </div>
+                );
+            }
+        }];
 
         return (
-            <div>
-                <div className="contact-list">
-                    {contactList.map((item, index) => {
-                        return (
-                            <div className="contact-item" key={index}>
-                                <span className="contact-item-cell">{item.id}</span>
-                                <span className="contact-item-cell">{item.name}</span>
-                                <span className="contact-item-cell">{item.gende}</span>
-                                <button onClick={() => { this._showDetail(item.id); }}>Detail</button>
-                            </div>
-                        );
-                    })}
-                </div>
-                <button onClick={::this._getContactList}>Load</button>
-            </div>
+            <Table columns={columns} dataSource={contactList} />
         );
     }
 }

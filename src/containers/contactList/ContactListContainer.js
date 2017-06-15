@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { hashHistory } from 'react-router';
 import { Button } from 'antd';
 
 import DomainComponentCreator from '../../utils/DomainComponentCreator';
@@ -12,8 +13,7 @@ import './contact-list-container.less';
 @DomainComponentCreator(ContactListDomain)
 export default class ContactListContainer extends PureComponent {
     _navAddContact() {
-        const { pushAction } = this.props;
-        pushAction('contact-add');
+        this.props.router.push('/contact-add');
     }
 
     render() {

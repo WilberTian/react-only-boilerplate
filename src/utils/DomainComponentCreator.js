@@ -24,6 +24,7 @@ const DomainComponentCreator = (domainObject) => {
 
             componentDidMount() {
                 this.eventBus.subscribe('@@MODEL_UPDATE', (msg, _model) => {
+                    console.log('@@MODEL_UPDATE');
                     this.setState({
                         model: _model
                     });
@@ -35,7 +36,7 @@ const DomainComponentCreator = (domainObject) => {
             }
 
             render() {
-                return <WrappedComponent model={this.state.model} action={this.action} />;
+                return <WrappedComponent {...this.props} model={this.state.model} action={this.action} />;
             }
         }
 
