@@ -5,6 +5,7 @@ import { Form, Input, Select, DatePicker, Button } from 'antd';
 
 import DomainComponentCreator from '../../utils/DomainComponentCreator';
 import ContactFormDomain from './ContactFormDomain';
+import NotificationBox from '../../components/NotificationBox';
 
 @DomainComponentCreator(ContactFormDomain)
 class ContactFormComponent extends PureComponent {
@@ -23,11 +24,19 @@ class ContactFormComponent extends PureComponent {
     _saveContactItem(e) {
         const { action } = this.props;
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
 
-                action.saveContact(values);
+                const result = await action.saveContact(values);
+
+                if (result.status === 1) {
+                    NotificationBox({
+                        message: 'Success',
+                        description: result.message,
+                        duration: 2
+                    });
+                }
 
                 hashHistory.push('/');
             }
@@ -52,7 +61,6 @@ class ContactFormComponent extends PureComponent {
         const { getFieldDecorator } = this.props.form;
 
         const { model } = this.props;
-        console.log(this.props);
 
         const formItemLayout = {
             labelCol: {

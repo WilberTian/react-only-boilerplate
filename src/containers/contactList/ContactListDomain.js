@@ -8,20 +8,20 @@ const domain = {
     },
 
     action: {
-        getContactList: async (dispatch, model) => {
+        getContactList: async () => {
             const result = await services.getContactList();
 
-            dispatch({
-                ...model,
+            domain.dispatch({
+                ...domain.model,
                 contactList: result.list
             });
         },
 
-        queryContactList: async (dispatch, model) => {
+        queryContactList: async () => {
             const result = await services.queryContactList();
 
-            dispatch({
-                ...model,
+            domain.dispatch({
+                ...domain.model,
                 contactList: result.list
             });
         }

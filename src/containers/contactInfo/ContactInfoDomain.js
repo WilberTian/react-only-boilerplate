@@ -14,11 +14,11 @@ const domain = {
     },
 
     action: {
-        getContactDetail: async (dispatch, model, id) => {
+        getContactDetail: async (id) => {
             const result = await services.getContactDetail(id);
 
-            dispatch({
-                ...model,
+            domain.dispatch({
+                ...domain.model,
                 contactInfo: result.contact
             });
         }

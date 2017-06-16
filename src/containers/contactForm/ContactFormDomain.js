@@ -14,13 +14,19 @@ const domain = {
     },
 
     action: {
-        getContactDetail: async (dispatch, model, id) => {
+        getContactDetail: async (id) => {
             const result = await services.getContactDetail(id);
 
-            dispatch({
-                ...model,
+            domain.dispatch({
+                ...domain.model,
                 contactInfo: result.contact
             });
+        },
+
+        saveContact: async (contact) => {
+            const result = await services.saveContact(contact);
+
+            return result;
         }
 
     }

@@ -3,7 +3,8 @@
     "message": "",
     "code": 0,
     "data": {
-        "message": "success"
+        "message": "Contact item was updated!",
+        "status": 1
     }
 }
 
