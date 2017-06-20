@@ -14,7 +14,7 @@ export default ({ modelMapper, actionMapper }) => {
 
                 const { model, action } = this.context;
 
-                return <WrappedComponent {...modelMapper(model)} {...actionMapper(action)} />;
+                return <WrappedComponent {...this.props} {...modelMapper(model)} {...actionMapper(action)} />;
             }
         }
 
