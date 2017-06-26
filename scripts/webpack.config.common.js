@@ -57,8 +57,8 @@ module.exports = {
             },
             {
                 test: /\.js?$/,
-                exclude: [
-                    path.resolve(rootPath, 'node_modules'),
+                include: [
+                    path.resolve(rootPath, 'src'),
                 ],
                 use: ['babel-loader']
             },
@@ -74,6 +74,10 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                include: [
+                    path.resolve(rootPath, 'src'),
+                    path.resolve(rootPath, 'node_modules'),
+                ],
                 use: [
                     'style-loader',
                     'css-loader',
@@ -82,6 +86,10 @@ module.exports = {
             },
             {
                 test: /\.less$/,
+                include: [
+                    path.resolve(rootPath, 'src'),
+                    path.resolve(rootPath, 'node_modules'),
+                ],
                 use: [
                     'style-loader',
                     'css-loader',

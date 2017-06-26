@@ -7,42 +7,34 @@ const DomainComponentCreator = (domainObject) => {
             constructor(props) {
                 super(props);
 
-                const domain = DomainCreator(domainObject);
-                this.eventBus = domain.eventBus;
-                this.state = {
-                    model: domain.model
-                };
-                this.action = domain.action;
+                this.domain = DomainCreator(domainObject);
+                this.state = {};
             }
 
             getChildContext() {
                 return {
-                    model: this.state.model,
-                    action: this.action
+                    domain: this.domain
                 };
             }
 
-            componentDidMount() {
-                this.eventBus.subscribe('@@MODEL_UPDATE', (msg, _model) => {
-                    console.log('@@MODEL_UPDATE');
-                    this.setState({
-                        model: _model
-                    });
+            componentWillMount() {
+                this.domain.eventBus.subscribe('@@MODEL_UPDATE', () => {
+                    console.log(`@@MODEL_UPDATE in ${WrappedComponent.name}`);
+                    this.setState({});
                 });
             }
 
             componentWillUnmount() {
-                this.eventBus.unsubscribe('@@MODEL_UPDATE');
+                this.domain.eventBus.unsubscribe('@@MODEL_UPDATE');
             }
 
             render() {
-                return <WrappedComponent {...this.props} model={this.state.model} action={this.action} />;
+                return <WrappedComponent {...this.props} model={this.domain.model} action={this.domain.action} />;
             }
         }
 
         DomainComponent.childContextTypes = {
-            model: React.PropTypes.object,
-            action: React.PropTypes.object
+            domain: React.PropTypes.object
         };
 
         return DomainComponent;
