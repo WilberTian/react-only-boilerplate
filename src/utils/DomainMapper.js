@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default ({ modelMapper, actionMapper }) => {
     return (WrappedComponent) => {
@@ -36,7 +37,7 @@ export default ({ modelMapper, actionMapper }) => {
         }
 
         SubDomainComponent.contextTypes = {
-            domain: React.PropTypes.object
+            domain: PropTypes.object
         };
 
         return SubDomainComponent;

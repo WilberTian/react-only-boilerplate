@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import DomainCreator from './DomainCreator';
 
 const DomainComponentCreator = (domainObject) => {
@@ -34,7 +36,7 @@ const DomainComponentCreator = (domainObject) => {
         }
 
         DomainComponent.childContextTypes = {
-            domain: React.PropTypes.object
+            domain: PropTypes.object
         };
 
         return DomainComponent;
