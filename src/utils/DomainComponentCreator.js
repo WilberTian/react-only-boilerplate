@@ -5,6 +5,8 @@ import DomainCreator from './DomainCreator';
 
 const DomainComponentCreator = (domainObject) => {
     return (WrappedComponent) => {
+        const wrappedComponentName = WrappedComponent.name;
+
         class DomainComponent extends Component {
             constructor(props) {
                 super(props);
@@ -20,14 +22,17 @@ const DomainComponentCreator = (domainObject) => {
             }
 
             componentWillMount() {
-                this.domain.eventBus.subscribe('@@MODEL_UPDATE', () => {
-                    console.log(`@@MODEL_UPDATE in ${WrappedComponent.name}`);
+                this.domain.components.push(wrappedComponentName);
+                this.domain.eventBus.subscribe(`${wrappedComponentName}@@MODEL_UPDATE`, () => {
+                    console.log(`@@MODEL_UPDATE in ${wrappedComponentName}`);
                     this.setState({});
                 });
             }
 
             componentWillUnmount() {
-                this.domain.eventBus.unsubscribe('@@MODEL_UPDATE');
+                const found = this.domain.components.indexOf(wrappedComponentName);
+                this.domain.components.splice(found, 1);
+                this.domain.eventBus.unsubscribe(`${wrappedComponentName}@@MODEL_UPDATE`);
             }
 
             render() {

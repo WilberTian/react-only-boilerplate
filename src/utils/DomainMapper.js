@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 export default ({ modelMapper, actionMapper }) => {
     return (WrappedComponent) => {
+        const wrappedComponentName = WrappedComponent.name;
+
         class SubDomainComponent extends Component {
             constructor(props) {
                 super(props);
@@ -12,13 +14,17 @@ export default ({ modelMapper, actionMapper }) => {
             componentWillMount() {
                 this.domain = this.context.domain;
 
-                this.domain.eventBus.subscribe('@@MODEL_UPDATE', () => {
+                this.domain.components.push(wrappedComponentName);
+                this.domain.eventBus.subscribe(`${wrappedComponentName}@@MODEL_UPDATE`, () => {
+                    console.log(`@@MODEL_UPDATE in ${wrappedComponentName}`);
                     this.setState({});
                 });
             }
 
             componentWillUnmount() {
-                this.domain.eventBus.unsubscribe('@@MODEL_UPDATE');
+                const found = this.domain.components.indexOf(wrappedComponentName);
+                this.domain.components.splice(found, 1);
+                this.domain.eventBus.unsubscribe(`${wrappedComponentName}@@MODEL_UPDATE`);
             }
 
             render() {
