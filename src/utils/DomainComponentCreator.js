@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import uuidv4 from './uuidv4';
+
 import DomainCreator from './DomainCreator';
 
 const DomainComponentCreator = (domainObject) => {
     return (WrappedComponent) => {
-        const wrappedComponentName = WrappedComponent.name;
-
         class DomainComponent extends Component {
             constructor(props) {
                 super(props);
 
                 this.domain = DomainCreator(domainObject);
                 this.state = {};
+                this._uniqueCompId = `${WrappedComponent.name}'$$'${uuidv4()}`;
             }
 
             getChildContext() {
@@ -22,17 +23,17 @@ const DomainComponentCreator = (domainObject) => {
             }
 
             componentWillMount() {
-                this.domain.components.push(wrappedComponentName);
-                this.domain.eventBus.subscribe(`${wrappedComponentName}@@MODEL_UPDATE`, () => {
-                    console.log(`@@MODEL_UPDATE in ${wrappedComponentName}`);
+                this.domain.components.push(this._uniqueCompId);
+                this.domain.eventBus.subscribe(`${this._uniqueCompId}@@MODEL_UPDATE`, () => {
+                    console.log(`@@MODEL_UPDATE in ${this._uniqueCompId}`);
                     this.setState({});
                 });
             }
 
             componentWillUnmount() {
-                const found = this.domain.components.indexOf(wrappedComponentName);
+                const found = this.domain.components.indexOf(this._uniqueCompId);
                 this.domain.components.splice(found, 1);
-                this.domain.eventBus.unsubscribe(`${wrappedComponentName}@@MODEL_UPDATE`);
+                this.domain.eventBus.unsubscribe(`${this._uniqueCompId}@@MODEL_UPDATE`);
             }
 
             render() {
