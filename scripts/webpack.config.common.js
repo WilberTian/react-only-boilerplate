@@ -5,7 +5,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 
 const rootPath = path.resolve(__dirname, '..');
-
+let NODE_ENV = process.env.NODE_ENV
 
 const postCSSLoader = {
    loader: "postcss-loader",
@@ -104,7 +104,11 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
-
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify(NODE_ENV),
+            },
+        }),
         /*
         new webpack.optimize.UglifyJsPlugin({
             compress: {
