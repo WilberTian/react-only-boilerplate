@@ -1,6 +1,7 @@
 import url from 'url';
 import fetch from 'isomorphic-fetch';
 
+import { FetchError, ServerError, TimeoutError } from '../errors';
 import delay from './delay';
 
 const SUCCESS_CODE_LOWER_BOUND = 200;
@@ -47,7 +48,7 @@ const sendRequest = async (config) => {
 
 const timeoutPromise = async (timeout) => {
     await delay(timeout);
-    throw new Error(timeout);
+    throw new TimeoutError(timeout);
 };
 
 export default async (config) => {
@@ -60,11 +61,11 @@ export default async (config) => {
 
     if (response.status < SUCCESS_CODE_LOWER_BOUND || response.status >= SUCCESS_CODE_HIGHER_BOUND) {
         // fetch will not goto reject path when server response 400, 500
-        throw new Error(response);
+        throw new FetchError(response);
     } else {
         const result = await response.json();
         if (result.code !== 0) {
-            throw new Error(result);
+            throw new ServerError(result);
         } else {
             return result.data;
         }
