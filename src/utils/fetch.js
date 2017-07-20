@@ -66,6 +66,8 @@ export default async (config) => {
         const result = await response.json();
         if (result.code !== 0) {
             throw new ServerError(result);
+        } else if (!result.success) {
+            throw new ServerError(result);
         } else {
             return result.data;
         }
