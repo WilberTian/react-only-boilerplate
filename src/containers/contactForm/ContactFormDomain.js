@@ -18,7 +18,7 @@ const domain = {
             const result = await services.getContactDetail(id);
 
             domain.dispatch({
-                ...domain.model,
+                ...domain.getCurrentModel,
                 contactInfo: result.contact
             });
         },

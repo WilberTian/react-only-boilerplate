@@ -41,9 +41,10 @@ export default ({ modelMapper, actionMapper }) => {
                     throw new Error('Domain actionMapper should be function');
                 }
 
-                const { model, action } = this.domain;
+                const { action } = this.domain;
+                const currentModel = this.domain.getCurrentModel();
 
-                return <WrappedComponent {...this.props} {...modelMapper(model)} {...actionMapper(action)} />;
+                return <WrappedComponent {...this.props} {...modelMapper(currentModel)} {...actionMapper(action)} />;
             }
         }
 

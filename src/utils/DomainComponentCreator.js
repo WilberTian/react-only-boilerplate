@@ -41,7 +41,9 @@ const DomainComponentCreator = (domainObject) => {
             }
 
             render() {
-                return <WrappedComponent {...this.props} model={this.domain.model} action={this.domain.action} />;
+                const currentModel = this.domain.getCurrentModel();
+
+                return <WrappedComponent {...this.props} model={currentModel} action={this.domain.action} />;
             }
         }
 

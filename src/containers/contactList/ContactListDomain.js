@@ -12,7 +12,7 @@ const domain = {
             const result = await services.getContactList();
 
             domain.dispatch({
-                ...domain.model,
+                ...domain.getCurrentModel,
                 contactList: result.list
             });
         },
@@ -21,7 +21,7 @@ const domain = {
             const result = await services.queryContactList();
 
             domain.dispatch({
-                ...domain.model,
+                ...domain.getCurrentModel,
                 contactList: result.list
             });
         }

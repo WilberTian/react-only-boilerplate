@@ -6,9 +6,14 @@ import * as environmentConstant from '../configs/environments';
 export default (domain) => {
     domain.eventBus = PubSub;
     domain.components = [];
+    domain.currentModel = domain.model;
+
+    domain.getCurrentModel = () => {
+        return domain.currentModel;
+    };
 
     domain.dispatch = (model) => {
-        domain.model = model;
+        domain.currentModel = model;
         domain.components.forEach((component) => {
             domain.eventBus.publish(`${component}@@MODEL_UPDATE`, domain);
         });
@@ -16,7 +21,7 @@ export default (domain) => {
 
     if (environment === environmentConstant.DEVELOPMENT) {
         window.$$domain = {
-            model: domain.model,
+            model: domain.currentModel,
             components: domain.components,
             action: domain.action
         };
