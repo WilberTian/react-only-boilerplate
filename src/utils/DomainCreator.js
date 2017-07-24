@@ -12,8 +12,13 @@ export default (domain) => {
         return domain.currentModel;
     };
 
-    domain.dispatch = (model) => {
-        domain.currentModel = model;
+    domain.dispatch = (modelUpdator) => {
+        if (typeof modelUpdator !== 'function') {
+            throw new Error('modelUpdator should be function');
+        }
+
+        domain.currentModel = modelUpdator(domain.currentModel);
+
         domain.components.forEach((component) => {
             domain.eventBus.publish(`${component}@@MODEL_UPDATE`, domain);
         });

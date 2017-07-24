@@ -11,18 +11,22 @@ const domain = {
         getContactList: async () => {
             const result = await services.getContactList();
 
-            domain.dispatch({
-                ...domain.getCurrentModel,
-                contactList: result.list
+            domain.dispatch((model) => {
+                return {
+                    ...model,
+                    contactList: result.list
+                };
             });
         },
 
         queryContactList: async () => {
             const result = await services.queryContactList();
 
-            domain.dispatch({
-                ...domain.getCurrentModel,
-                contactList: result.list
+            domain.dispatch((model) => {
+                return {
+                    ...model,
+                    contactList: result.list
+                };
             });
         }
 

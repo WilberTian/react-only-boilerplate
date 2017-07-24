@@ -17,9 +17,11 @@ const domain = {
         getContactDetail: async (id) => {
             const result = await services.getContactDetail(id);
 
-            domain.dispatch({
-                ...domain.getCurrentModel,
-                contactInfo: result.contact
+            domain.dispatch((model) => {
+                return {
+                    ...model,
+                    contactInfo: result.contact
+                };
             });
         }
 
