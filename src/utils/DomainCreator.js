@@ -20,11 +20,7 @@ export default (domain) => {
     };
 
     if (environment === environmentConstant.DEVELOPMENT) {
-        window.$$domain = {
-            model: domain.currentModel,
-            components: domain.components,
-            action: domain.action
-        };
+        window.$$domain = domain;
     }
 
     return domain;
