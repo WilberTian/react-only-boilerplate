@@ -16,20 +16,26 @@ export default ({ modelMapper, actionMapper }) => {
 
             componentWillMount() {
                 this.domain = this.context.domain;
+                const currentModel = this.domain.getCurrentModel();
 
-                this.domain.components.push(this._uniqueCompId);
-                this.domain.eventBus.subscribe(`${this._uniqueCompId}@@MODEL_UPDATE`, () => {
-                    if (environment === environmentConstant.DEVELOPMENT) {
-                        console.log(`@@MODEL_UPDATE in ${this._uniqueCompId}`);
-                    }
-                    this.setState({});
-                });
+                if (modelMapper(currentModel) !== undefined) {
+                    this.domain.components.push(this._uniqueCompId);
+                    this.domain.eventBus.subscribe(`${this._uniqueCompId}@@MODEL_UPDATE`, () => {
+                        if (environment === environmentConstant.DEVELOPMENT) {
+                            console.log(`@@MODEL_UPDATE in ${this._uniqueCompId}`);
+                        }
+                        this.setState({});
+                    });
+                }
             }
 
             componentWillUnmount() {
-                const found = this.domain.components.indexOf(this._uniqueCompId);
-                this.domain.components.splice(found, 1);
-                this.domain.eventBus.unsubscribe(`${this._uniqueCompId}@@MODEL_UPDATE`);
+                const currentModel = this.domain.getCurrentModel();
+                if (modelMapper(currentModel) !== undefined) {
+                    const found = this.domain.components.indexOf(this._uniqueCompId);
+                    this.domain.components.splice(found, 1);
+                    this.domain.eventBus.unsubscribe(`${this._uniqueCompId}@@MODEL_UPDATE`);
+                }
             }
 
             render() {
