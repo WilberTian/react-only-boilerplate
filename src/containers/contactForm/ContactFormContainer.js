@@ -4,10 +4,27 @@ import moment from 'moment';
 import { Form, Input, Select, DatePicker, Button } from 'antd';
 
 import DomainComponentCreator from '../../utils/DomainComponentCreator';
+import DomainMapper from '../../utils/DomainMapper';
+
 import ContactFormDomain from './ContactFormDomain';
 import NotificationBox from '../../components/NotificationBox';
 
+const mapper = {
+    modelMapper: (model) => {
+        return {
+            contactInfo: model.contactInfo
+        };
+    },
+    actionMapper: (action) => {
+        return {
+            getContactDetail: action.getContactDetail,
+            saveContact: action.saveContact
+        };
+    }
+};
+
 @DomainComponentCreator(ContactFormDomain)
+@DomainMapper(mapper)
 class ContactFormComponent extends PureComponent {
     componentWillMount() {
         const { router } = this.props;
@@ -17,18 +34,18 @@ class ContactFormComponent extends PureComponent {
     }
 
     async _getContactDetail() {
-        const { action, params } = this.props;
-        await action.getContactDetail(params.id);
+        const { getContactDetail, params } = this.props;
+        await getContactDetail(params.id);
     }
 
     _saveContactItem(e) {
-        const { action } = this.props;
+        const { saveContact } = this.props;
         e.preventDefault();
         this.props.form.validateFieldsAndScroll(async (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
 
-                const result = await action.saveContact(values);
+                const result = await saveContact(values);
 
                 if (result.status === 1) {
                     NotificationBox({
@@ -60,7 +77,7 @@ class ContactFormComponent extends PureComponent {
         const Option = Select.Option;
         const { getFieldDecorator } = this.props.form;
 
-        const { model } = this.props;
+        const { contactInfo } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -95,7 +112,7 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('name', {
-                            initialValue: model.contactInfo.name,
+                            initialValue: contactInfo.name,
                             rules: [{
                                 required: true, message: 'Please input your Name',
                             }, {
@@ -111,7 +128,7 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('gender', {
-                            initialValue: model.contactInfo.gender,
+                            initialValue: contactInfo.gender,
                             rules: [{
                                 required: true, message: 'Please select your gender',
                             }]
@@ -128,8 +145,8 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('birthday', {
-                            initialValue: (model.contactInfo.birthday ?
-                                            moment(model.contactInfo.birthday, 'YYYY-MM-DD') :
+                            initialValue: (contactInfo.birthday ?
+                                            moment(contactInfo.birthday, 'YYYY-MM-DD') :
                                             null),
                             rules: [{
                                 required: true, message: 'Please select your brithday',
@@ -144,7 +161,7 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('phone', {
-                            initialValue: model.contactInfo.phone,
+                            initialValue: contactInfo.phone,
                             rules: [{
                                 required: true,
                                 pattern: /^1[34578]\d{9}$/,
@@ -160,7 +177,7 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('email', {
-                            initialValue: model.contactInfo.email,
+                            initialValue: contactInfo.email,
                             rules: [{
                                 type: 'email', message: 'The input is not valid E-mail!',
                             }, {
@@ -176,7 +193,7 @@ class ContactFormComponent extends PureComponent {
                       hasFeedback
                     >
                         {getFieldDecorator('address', {
-                            initialValue: model.contactInfo.address,
+                            initialValue: contactInfo.address,
                             rules: [{
                                 required: true, message: 'Please input your address',
                             }]
