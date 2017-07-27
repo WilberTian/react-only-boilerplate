@@ -52,7 +52,6 @@ export default ({ modelMapper, actionMapper }) => {
             }
 
             render() {
-                console.log(WrappedComponent.name);
                 const { action } = this.domain;
                 return <WrappedComponent {...this.props} {...this.modelMapperPorps} {...actionMapper(action)} />;
             }
