@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { hashHistory } from 'react-router';
 import { Button } from 'antd';
 
 import DomainComponentCreator from '../../utils/DomainComponentCreator';

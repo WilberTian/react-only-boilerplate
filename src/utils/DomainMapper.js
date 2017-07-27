@@ -7,6 +7,14 @@ import * as environmentConstant from '../configs/environments';
 
 export default ({ modelMapper, actionMapper }) => {
     return (WrappedComponent) => {
+        if (typeof modelMapper !== 'function') {
+            throw new Error('Domain modelMapper should be function');
+        }
+
+        if (typeof actionMapper !== 'function') {
+            throw new Error('Domain actionMapper should be function');
+        }
+
         class SubDomainComponent extends Component {
             constructor(props) {
                 super(props);
@@ -16,22 +24,27 @@ export default ({ modelMapper, actionMapper }) => {
 
             componentWillMount() {
                 this.domain = this.context.domain;
-                const currentModel = this.domain.getCurrentModel();
+                this.modelMapperPorps = modelMapper(this.domain.getCurrentModel());
 
-                if (modelMapper(currentModel) !== undefined) {
+                if (this.modelMapperPorps !== undefined) {
                     this.domain.components.push(this._uniqueCompId);
                     this.domain.eventBus.subscribe(`${this._uniqueCompId}@@MODEL_UPDATE`, () => {
                         if (environment === environmentConstant.DEVELOPMENT) {
                             console.log(`@@MODEL_UPDATE in ${this._uniqueCompId}`);
                         }
-                        this.setState({});
+
+                        const newModelMapperPorps = modelMapper(this.domain.getCurrentModel());
+
+                        if (JSON.stringify(this.modelMapperPorps) !== JSON.stringify(newModelMapperPorps)) {
+                            this.modelMapperPorps = newModelMapperPorps;
+                            this.setState({});
+                        }
                     });
                 }
             }
 
             componentWillUnmount() {
-                const currentModel = this.domain.getCurrentModel();
-                if (modelMapper(currentModel) !== undefined) {
+                if (this.modelMapperPorps !== undefined) {
                     const found = this.domain.components.indexOf(this._uniqueCompId);
                     this.domain.components.splice(found, 1);
                     this.domain.eventBus.unsubscribe(`${this._uniqueCompId}@@MODEL_UPDATE`);
@@ -39,18 +52,9 @@ export default ({ modelMapper, actionMapper }) => {
             }
 
             render() {
-                if (typeof modelMapper !== 'function') {
-                    throw new Error('Domain modelMapper should be function');
-                }
-
-                if (typeof actionMapper !== 'function') {
-                    throw new Error('Domain actionMapper should be function');
-                }
-
+                console.log(WrappedComponent.name);
                 const { action } = this.domain;
-                const currentModel = this.domain.getCurrentModel();
-
-                return <WrappedComponent {...this.props} {...modelMapper(currentModel)} {...actionMapper(action)} />;
+                return <WrappedComponent {...this.props} {...this.modelMapperPorps} {...actionMapper(action)} />;
             }
         }
 
