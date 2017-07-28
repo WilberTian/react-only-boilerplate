@@ -44,7 +44,6 @@
     "postcss-loader": "^2.0.5",
     "progress-bar-webpack-plugin": "^1.9.3",
     "prop-types": "^15.5.8",
-    "pubsub-js": "^1.5.7",
     "react": "^15.5.4",
     "react-dev-utils": "^0.5.2",
     "react-dom": "^15.5.4",

@@ -1,10 +1,11 @@
-import PubSub from 'pubsub-js';
+import EventBus from './EventBus';
 
 import environment from './environment';
 import * as environmentConstant from '../configs/environments';
 
 export default (domain) => {
-    domain.eventBus = PubSub;
+    domain.eventBus = new EventBus();
+
     domain.components = [];
     domain.currentModel = domain.model;
 
