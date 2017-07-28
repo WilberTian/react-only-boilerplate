@@ -5,7 +5,15 @@ import DomainCreator from './DomainCreator';
 
 const DomainComponentCreator = (domainObject) => {
     return (WrappedComponent) => {
+        const getDisplayName = (_WrappedComponent) => {
+            return _WrappedComponent.displayName ||
+                _WrappedComponent.name ||
+                'Component';
+        };
+
         class DomainComponent extends Component {
+            static displayName = `HOC_${getDisplayName(WrappedComponent)}`;
+
             constructor(props) {
                 super(props);
 

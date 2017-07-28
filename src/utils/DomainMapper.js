@@ -15,7 +15,15 @@ export default ({ modelMapper, actionMapper }) => {
             throw new Error('Domain actionMapper should be function');
         }
 
+        const getDisplayName = (_WrappedComponent) => {
+            return _WrappedComponent.displayName ||
+                _WrappedComponent.name ||
+                'Component';
+        };
+
         class SubDomainComponent extends Component {
+            static displayName = `HOC_${getDisplayName(WrappedComponent)}`;
+
             constructor(props) {
                 super(props);
                 this.state = {};
