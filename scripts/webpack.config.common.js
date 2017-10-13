@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
+const BABEL_POLYFILL_NAME = 'babel-polyfill';
 
 const rootPath = path.resolve(__dirname, '..');
 let NODE_ENV = process.env.NODE_ENV
@@ -34,9 +35,13 @@ module.exports = {
             'react-hot-loader/patch',
             path.resolve(rootPath, 'src/entries/detail')
         ],
-        common: [
-            'babel-polyfill'
-        ]
+        external: [
+            'webpack-dev-server/client?http://127.0.0.1:3000/',
+            'webpack/hot/only-dev-server',
+            'react-hot-loader/patch',
+            path.resolve(rootPath, 'src/entries/external')
+        ],
+        [BABEL_POLYFILL_NAME]: 'babel-polyfill'
     },
 
     output: {
@@ -118,21 +123,27 @@ module.exports = {
         */
 
         new webpack.optimize.CommonsChunkPlugin({
-            name: "common",
-            filename: "common.js",
+            name: ["common", BABEL_POLYFILL_NAME],
+            filename: "[name].js",
             minChunks: 2,
         }),
 
         new HtmlWebpackPlugin({
             filename: 'index.html',                                        
             template: rootPath + '/src/htmls/index.html',
-            chunks: ['common', 'index']
+            chunks: [BABEL_POLYFILL_NAME, 'common', 'index']
         }),
 
         new HtmlWebpackPlugin({
             filename: 'detail.html',                                        
             template: rootPath + '/src/htmls/detail.html',
-            chunks: ['common', 'detail']
+            chunks: [BABEL_POLYFILL_NAME, 'common', 'detail']
+        }),
+
+        new HtmlWebpackPlugin({
+            filename: 'external.html',                                        
+            template: rootPath + '/src/htmls/external.html',
+            chunks: [BABEL_POLYFILL_NAME, 'common', 'external']
         }),
 
         new ProgressBarPlugin({
